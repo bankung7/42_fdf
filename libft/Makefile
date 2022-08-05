@@ -10,6 +10,12 @@
 #                                                                              #
 # **************************************************************************** #
 
+# Color
+R = \033[0;31m
+G = \033[0;32m
+Y = \033[0;33m
+N = \033[0m
+
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -rf
@@ -42,11 +48,11 @@ all: $(NAME)
 
 $(NAME): $(OBJS_LIBFT) $(OBJS_GNL) $(OBJS_FT_PRINTF)
 	@ar rcs $@ $^
-	@echo "\033[32m libft is ready"
+	@echo "$(G)libft is ready $(N)"
 
 # libft
 $(OBJS_DIR)%.o: ./srcs/libft/%.c
-	@echo "\033[33m compling [$@]"
+	@echo "$(Y)compling [$@]$(N)"
 	@mkdir -p $(OBJS_DIR)
 	@$(CC) $(CFLAGS) -I./inc -c $^ -o $@
 	@printf "\033[A \033[K"
@@ -63,11 +69,11 @@ $(OBJS_DIR)%.o: ./srcs/ft_printf/%.c
 
 clean:
 	@$(RM) $(OBJS_DIR)
-	@echo "libft is clean"
+	@echo "$(R)libft is clean$(N)"
 
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "libft is fclean"
+	@echo "$(R)libft is fclean$(N)"
 
 re: fclean all
 

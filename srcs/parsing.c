@@ -1,105 +1,81 @@
 #include "fdf.h"
 
-void    ft_freearr(void **arr)
-{
-    int i;
-    
-    i = 0;
-    while (arr[i])
-        free(arr[i++]);
-    free(arr);
-}
-
-int	ft_arrlen(char **arr)
+int	ft_getwidth(void **arr)
 {
 	int	i;
 
 	i = 0;
 	while (arr[i])
-		i++;
+		free(arr[i++]);
+	free(arr);
+	arr = 0;
 	return (i);
 }
 
-int	ft_build(int fd, t_info *info, int i, int j)
+void	ft_setz(t_map *map, char *line, int i)
 {
-	int	*iarr;
-	char *s;
-	char **arr;
+	int	j;
+	char	**arr;
 
-	s = get_next_line(fd);
-	if (s)
+	map->z[i] = malloc(sizeof(int) * map->wd);
+	if (map->z[i] == 0)
 	{
-		ft_build(fd, info, ++i, -1);
-		if (!info)
-			free(s);
-		else
-		{
-			arr = ft_split(s, ' ');
-			iarr = malloc(sizeof(int *) * ft_arrlen(arr));
-			if (!iarr)
-			{
-				ft_freearr((void **)arr);
-				return (0);
-			}
-			while (arr[++j])
-			{
-				iarr[j] = ft_atoi(arr[j]);
-				if ((info->vy - i) *iarr[j] > info->m)
-					info->m = iarr[j];
-			}
-			info->z[i - 1] = iarr;
-			info->vx = ft_arrlen(arr);
-		}
+		ft_getwidth((void**)map->z[i]);
+		exit(0);
 	}
-	else
+	arr = ft_split(line, ' ');
+	free(line);
+	j = 0;
+	while (arr[j])
 	{
-		info->z = malloc(sizeof(int **) * i);
-		info->vy = i;
+		map->z[i][j] = ft_atoi(arr[j]);
+		j++;
 	}
-	return (0);
+	
 }
 
-t_info	*ft_parsing(const char *path)
+void	ft_getz(t_map *map, char *file)
 {
 	int	fd;
-	t_info	*info;
+	int	i;
+	char	*line;
 
-	info = malloc(sizeof(t_info));
-	if (!info)
-		return (0);
-	info->m = 0;
-	fd = open(path, O_RDONLY);
-	ft_build(fd, info, 0, -1);
-	close(fd);		
-	return (info);
+	fd = open(file, O_RDONLY);
+	i = 0;
+	map->z = malloc(sizeof(int*) * map->ht);
+	if (map->z == 0)
+		return ;
+	line = get_next_line(fd);
+	while (line)
+	{
+		ft_setz(map, line, i++);
+		line = get_next_line(fd);
+	}
+	close(fd);
 }
 
-// t_info	*ft_parsing(const char *path)
-// {
-// 	int fd;
-// 	char **rd;
-// 	char *s;
-// 	t_info *info;
+void	ft_getdim(t_map *map, char *file)
+{
+	int	fd;
+	char	*line;
+	char	**arr;
 
-// 	info = malloc(sizeof(t_info));
-// 	if (!info)
-// 		return (0);
-// 	fd = open(path, O_RDONLY);
-// 	s = get_next_line(fd);
-// 	info->vx = 0;
-// 	info->vy = 0;
-// 	while (s)
-// 	{
-// 		if (info->vx == 0)
-// 		{
-// 			rd = ft_split(s, ' ');
-// 			info->vx = ft_arrlen(rd);
-// 			ft_freearr(rd);
-// 		}
-// 		info->vy++;
-// 		free(s);
-// 		s= get_next_line(fd);
-// 	}
-// 	close(fd);
-// 	return (info);
-// }
+	map->ht = 0;
+	fd = open(file, O_RDONLY);
+	line = get_next_line(fd);
+	arr = ft_split(line, ' ');
+	map->wd = ft_getwidth((void**)arr);
+	while (line != 0)
+	{
+		map->ht++;
+		free(line);
+		line = get_next_line(fd);
+	}
+	close(fd);
+}
+
+void	ft_parsing(t_map *map, char *file)
+{
+	ft_getdim(map, file);
+	ft_getz(map, file);
+}

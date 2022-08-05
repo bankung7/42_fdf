@@ -10,62 +10,44 @@
 # include "get_next_line.h"
 # include "ft_printf.h"
 
-// info data
-typedef struct s_info
-{
-	int	x;
-	int y;
-	int	vx;
-	int	vy;
-	int	size;
-	int m;
-	int	color;
-	int **z;
-} t_info;
-
-// image structure
-typedef struct s_img
-{
-	void *img;
-	char *addr;
-	int pixel_bits;
-	int line_bytes;
-	int endian;
-	int width;
-	int height;
-} t_img;
-
-typedef struct s_data
-{
-	void *mlx;
-	void *win_ptr;
-} t_data;
-
-typedef struct s_line
-{
-	int x0;
-	int y0;
-	int x1;
-	int y1;
-	int dx;
-	int dy;
-	int d;
-	int r;
-} t_line;
-
 typedef struct s_ace
 {
-	int i;
-	int j;
-} t_ace;
+	int	i;
+	int	j;
+}	t_ace;
 
-// exit.c
-void    ft_freearr(void **arr);
-void    ft_exit(void **arr1, void *arr2);
+typedef struct	s_line
+{
+	int	x0;
+	int	y0;
+	int	x1;
+	int	y1;
+	int	dx;
+	int	dy;
+	int	d;
+	int	r;
+}	t_line;
+
+typedef struct	s_map
+{
+	void	*mlx;
+	void	*mlx_win;
+	void	*mlx_img;
+	int	wd;
+	int	ht;
+	int	**z;
+	char	*addr;
+	int	bpp;
+	int	line_size;
+	int	endian;
+	int	size;
+}	t_map;
 
 // parsing.c
-int	ft_arrlen(char **arr);
-int	ft_build(int fd, t_info *info, int i, int j);
-t_info	*ft_parsing(const char *path);
+void	ft_parsing(t_map *map, char *file);
+
+// draw.c
+void	ft_put_pixel(t_map *map, int x, int y, int color);
+void	ft_plotline(t_map *map, t_ace ace, int r);
 
 #endif

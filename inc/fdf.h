@@ -33,6 +33,8 @@ typedef struct	s_map
 	void	*mlx;
 	void	*mlx_win;
 	void	*mlx_img;
+	int win_width;
+	int	win_height;
 	int	wd;
 	int	ht;
 	int	**z;
@@ -41,6 +43,13 @@ typedef struct	s_map
 	int	line_size;
 	int	endian;
 	int	size;
+	int	x;
+	int	y;
+	int ha;
+	int	xh;
+	int	yh;
+	int hv;
+	float	pa;
 }	t_map;
 
 // parsing.c
@@ -48,6 +57,6 @@ void	ft_parsing(t_map *map, char *file);
 
 // draw.c
 void	ft_put_pixel(t_map *map, int x, int y, int color);
-void	ft_plotline(t_map *map, t_ace ace, int r);
+void	ft_plotline(t_map *map, t_ace ace, int r, int color);
 
 #endif

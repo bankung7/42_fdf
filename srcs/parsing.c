@@ -1,8 +1,8 @@
 #include "fdf.h"
 
-int	ft_getwidth(void **arr)
+int ft_getwidth(void **arr)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (arr[i])
@@ -12,59 +12,76 @@ int	ft_getwidth(void **arr)
 	return (i);
 }
 
-void	ft_setz(t_map *map, char *line, int i)
+void ft_setz(t_map *map, char *line, int i)
 {
-	int	j;
-	char	**arr;
+	int j;
+	char **arr;
 
-	map->z[i] = malloc(sizeof(int) * map->wd);
+	map->z[i] = malloc(sizeof(int) * map->wd + 1);
 	if (map->z[i] == 0)
 	{
-		ft_getwidth((void**)map->z[i]);
+		ft_getwidth((void **)map->z);
 		exit(0);
 	}
 	arr = ft_split(line, ' ');
 	free(line);
-	j = 0;
-	while (arr[j])
+	j = -1;
+	while (arr[++j])
 	{
 		map->z[i][j] = ft_atoi(arr[j]);
-		j++;
+		if (map->z[i][j] > map->hv)
+			map->hv = map->z[i][j];
+		if ((i - j) - (map->z[i][j]) < map->ha)
+		{
+			map->xh = j;
+			map->yh = i;
+			map->ha = (i - j) - (map->z[i][j]);
+		}
 	}
-	
+	map->z[i][++j] = 0;
 }
 
-void	ft_getz(t_map *map, char *file)
+void ft_getz(t_map *map, char *file)
 {
-	int	fd;
-	int	i;
-	char	*line;
+	int fd;
+	int i;
+	int j;
+	char *line;
 
 	fd = open(file, O_RDONLY);
 	i = 0;
-	map->z = malloc(sizeof(int*) * map->ht);
+	map->z = malloc(sizeof(int *) * map->ht + 1);
 	if (map->z == 0)
-		return ;
+		return;
 	line = get_next_line(fd);
 	while (line)
 	{
 		ft_setz(map, line, i++);
 		line = get_next_line(fd);
 	}
+	j = 0;
+	map->z[i] = malloc(sizeof(int) * map->wd + 1);
+	if (!map->z[i])
+	{
+		ft_getwidth((void **)map->z);
+		exit(0);
+	}
+	while (j <= map->wd)
+		map->z[i][j++] = 0;
 	close(fd);
 }
 
-void	ft_getdim(t_map *map, char *file)
+void ft_getdim(t_map *map, char *file)
 {
-	int	fd;
-	char	*line;
-	char	**arr;
+	int fd;
+	char *line;
+	char **arr;
 
 	map->ht = 0;
 	fd = open(file, O_RDONLY);
 	line = get_next_line(fd);
 	arr = ft_split(line, ' ');
-	map->wd = ft_getwidth((void**)arr);
+	map->wd = ft_getwidth((void **)arr);
 	while (line != 0)
 	{
 		map->ht++;
@@ -74,8 +91,10 @@ void	ft_getdim(t_map *map, char *file)
 	close(fd);
 }
 
-void	ft_parsing(t_map *map, char *file)
+void ft_parsing(t_map *map, char *file)
 {
+	map->ha = 0;
+	map->hv = 0;
 	ft_getdim(map, file);
 	ft_getz(map, file);
 }

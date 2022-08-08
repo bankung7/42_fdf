@@ -95,7 +95,7 @@ void ft_plotline(t_map *map, t_ace ace, int r, int color)
 	t_line line;
 
 	ft_setline(map, ace, &line, r);
-	if (abs(line.y1 - line.y0) < abs(line.x1 - line.x0))
+	if (fabsf(line.y1 - line.y0) < fabsf(line.x1 - line.x0))
 	{
 		if (line.x0 > line.x1)
 		{

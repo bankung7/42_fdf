@@ -18,14 +18,14 @@ typedef struct s_ace
 
 typedef struct	s_line
 {
-	int	x0;
-	int	y0;
-	int	x1;
-	int	y1;
-	int	dx;
-	int	dy;
-	int	d;
-	int	r;
+	float	x0;
+	float	y0;
+	float	x1;
+	float	y1;
+	float	dx;
+	float	dy;
+	float	d;
+	float	r;
 }	t_line;
 
 typedef struct	s_map
@@ -42,13 +42,15 @@ typedef struct	s_map
 	int	bpp;
 	int	line_size;
 	int	endian;
-	int	size;
-	int	x;
-	int	y;
+	float	size;
+	float	x;
+	float	y;
 	int ha;
 	int	xh;
 	int	yh;
-	int hv;
+	int la;
+	int xl;
+	int yl;
 	float	pa;
 }	t_map;
 

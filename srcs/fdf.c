@@ -1,4 +1,5 @@
 #include "fdf.h"
+#include <stdio.h>
 
 void ft_draw(t_map *map)
 {
@@ -11,6 +12,7 @@ void ft_draw(t_map *map)
 		ace.j = 0;
 		while (ace.j < map->wd)
 		{
+			// printf("[%d][%d]\n", ace.i, ace.j);
 			if (ace.i != map->ht - 1)
 				ft_plotline(map, ace, 1, 0xFFFFFF);
 			if (ace.j < map->wd - 1)
@@ -28,25 +30,28 @@ int main(int argc, char **argv)
 	if (argc != 2)
 		return (0);
 	ft_parsing(&map, argv[1]);
-	map.size = 1;
 	map.win_width = 600;
+	map.win_height = 600;
 	map.pa = 2;
-	if (500 / ((map.wd + map.ht) * 2) > 2)
+	// map.size = 1;
+	map.size = ((float)(map.win_width - 50) / (map.wd + map.ht) / 2);
+	if (map.size < 0.65)
 	{
-		map.size = 500 / ((map.wd + map.ht) * 2);
-		map.win_height = (map.wd + map.ht) * map.size + (map.z[map.yh][map.xh] * map.pa) + 100;
+		map.size = 0.65;
+		map.win_width = map.size * (map.wd + map.ht) * 2 + 50;
 	}
-	else
+	printf("%d %d [%f]\n", map.win_width, (map.wd + map.ht), map.size);
+	map.pa = (float)(map.win_height - 50) / abs(map.ha - map.la);
+	if (map.pa < 0.65)
 	{
-		map.size = 1;
-		map.win_width = 2 * map.size * (map.wd + map.ht) + 100;
-		map.win_height = (map.wd + map.ht) * map.size + (map.z[map.yh][map.xh] * map.pa) + 100;
+		map.pa = 0.65;
+		map.win_height = 50 + abs(map.ha - map.la) * map.pa;
 	}
-	map.x = 50;
-	map.y = 50 + (map.wd * map.size) + map.z[map.yh][map.xh] * map.pa;
-	ft_printf("%d for %d\n", map.pa, map.hv);
-	ft_printf("%d x %d with size %d\n", map.wd, map.ht, map.size);
-	ft_printf("%d x %d heighest point %d\n", map.win_width, map.win_height, map.ha);
+	printf("ha: %d, la: %d, pa: %f\n", map.ha, map.la, map.pa);
+	map.x = 25;
+	map.y = 600;
+	printf("%d %d %d\n", map.xh, map.yh, map.z[map.yh][map.xh]);
+	printf("%d, %d\n", map.win_width, map.win_height);
 	map.mlx = mlx_init();
 	map.mlx_win = mlx_new_window(map.mlx, map.win_width, map.win_height, "My window");
 	map.mlx_img = mlx_new_image(map.mlx, map.win_width, map.win_height);

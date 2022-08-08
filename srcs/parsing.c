@@ -1,4 +1,5 @@
 #include "fdf.h"
+#include <stdio.h>
 
 int ft_getwidth(void **arr)
 {
@@ -29,13 +30,17 @@ void ft_setz(t_map *map, char *line, int i)
 	while (arr[++j])
 	{
 		map->z[i][j] = ft_atoi(arr[j]);
-		if (map->z[i][j] > map->hv)
-			map->hv = map->z[i][j];
 		if ((i - j) - (map->z[i][j]) < map->ha)
 		{
 			map->xh = j;
 			map->yh = i;
 			map->ha = (i - j) - (map->z[i][j]);
+		}
+		else if ((i - j) - (map->z[i][j]) > map->la)
+		{
+			map->xl = j;
+			map->yl = i;
+			map->la = (i - j) - (map->z[i][j]);
 		}
 	}
 	map->z[i][++j] = 0;
@@ -88,13 +93,14 @@ void ft_getdim(t_map *map, char *file)
 		free(line);
 		line = get_next_line(fd);
 	}
+	printf("height: %d\n", map->ht);
 	close(fd);
 }
 
 void ft_parsing(t_map *map, char *file)
 {
 	map->ha = 0;
-	map->hv = 0;
+	map->la = 0;
 	ft_getdim(map, file);
 	ft_getz(map, file);
 }

@@ -1,0 +1,16 @@
+///// Phase 1 /////
+1.1 Check arg
+1.2 Input
+
+///// Phase 2 /////
+2.1 Intiate mlx
+2.2 Build window
+2.3 Build image
+2.4 Set data_addr
+
+//// Phase 3 /////
+3.1 Draw
+3.2 Put image to window
+
+///// Phase 4 /////
+4.1 Loop

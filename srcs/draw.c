@@ -67,11 +67,11 @@ void ft_setline(t_map *map, t_ace ace, t_line *line, int r)
 	int z;
 
 	if (r == -1)
-		z = map->z[ace.i][ace.j + 1] * map->pa;
+		z = map->alt[ace.i][ace.j + 1] * map->pa;
 	else
-		z = map->z[ace.i + 1][ace.j] * map->pa;
+		z = map->alt[ace.i + 1][ace.j] * map->pa;
 	line->x0 = map->x + (2 * map->size * ace.i) + (2 * map->size * ace.j);
-	line->y0 = map->y + (map->size * ace.i) - (map->size * ace.j) - (map->z[ace.i][ace.j] * map->pa);
+	line->y0 = map->y + (map->size * ace.i) - (map->size * ace.j) - (map->alt[ace.i][ace.j] * map->pa);
 	line->x1 = map->x + (2 * map->size * (ace.i + 1)) + (2 * map->size * ace.j);
 	line->y1 = map->y + (map->size * ace.i) - (map->size * ace.j) + (r * map->size) - z;
 	line->d = 0;

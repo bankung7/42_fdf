@@ -1,7 +1,7 @@
 #include "fdf.h"
 #include <stdio.h>
 
-int ft_getwidth(void **arr)
+void ft_free(void **arr)
 {
 	int i;
 
@@ -9,70 +9,93 @@ int ft_getwidth(void **arr)
 	while (arr[i])
 		free(arr[i++]);
 	free(arr);
-	arr = 0;
-	return (i);
 }
 
-void ft_setz(t_map *map, char *line, int i)
+void ft_trackht(t_map *map, int i, int j)
+{
+	int value;
+	// char **attr;
+
+	value = (i - j) * map->size - map->alt[i][j] * map->pa;
+	if (value < map->top)
+		map->top = value;
+	if (value > map->bottom)
+		map->bottom = value;
+	if (map->alt[i][j] > map->highest)
+		map->highest = map->alt[i][j];
+	// if (ft_strchr(a, ',') >= 0)
+	// {
+	// 	attr = ft_split(a, ',');
+	// 	printf("%d\n", ft_atoi(attr[1]));
+	// 	map->color[i][j] = ft_atoi(attr[1]);
+	// 	ft_free((void**)attr);
+	// }	
+}
+
+void ft_addalt(t_map *map, char *line, int i)
 {
 	int j;
 	char **arr;
 
-	map->z[i] = malloc(sizeof(int) * map->wd + 1);
-	if (map->z[i] == 0)
-	{
-		ft_getwidth((void **)map->z);
+	// ask for map->alt[i] -> free
+	map->alt[i] = malloc(sizeof(int) * map->wd + 1);
+	if (!map->alt[i])
 		exit(0);
-	}
+	j = 0;
 	arr = ft_split(line, ' ');
-	free(line);
-	j = -1;
-	while (arr[++j])
+	if (line != 0)
 	{
-		map->z[i][j] = ft_atoi(arr[j]);
-		if ((i - j) - (map->z[i][j]) < map->ha)
+		while (arr[j])
 		{
-			map->xh = j;
-			map->yh = i;
-			map->ha = (i - j) - (map->z[i][j]);
-		}
-		else if ((i - j) - (map->z[i][j]) > map->la)
-		{
-			map->xl = j;
-			map->yl = i;
-			map->la = (i - j) - (map->z[i][j]);
+			map->alt[i][j] = ft_atoi(arr[j]);
+			ft_trackht(map, i, j);
+			j++;
 		}
 	}
-	map->z[i][++j] = 0;
+	else
+	{
+		while (j < map->wd)
+			map->alt[i][j++] = 0;
+	}
+	map->alt[i][j] = 0;
+	ft_free((void **)arr);
 }
 
-void ft_getz(t_map *map, char *file)
+void ft_getalt(t_map *map, char *file)
 {
-	int fd;
 	int i;
-	int j;
+	int fd;
 	char *line;
 
-	fd = open(file, O_RDONLY);
+	// Open and check fd -> free
 	i = 0;
-	map->z = malloc(sizeof(int *) * map->ht + 1);
-	if (map->z == 0)
-		return;
+	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		exit(0);
+	// ask for altitude -> free
+	map->alt = malloc(sizeof(int *) * map->ht + 1);
+	if (!map->alt)
+		exit(0);
 	line = get_next_line(fd);
 	while (line)
 	{
-		ft_setz(map, line, i++);
+		ft_addalt(map, line, i++);
+		free(line);
 		line = get_next_line(fd);
 	}
-	j = 0;
-	map->z[i] = malloc(sizeof(int) * map->wd + 1);
-	if (!map->z[i])
-	{
-		ft_getwidth((void **)map->z);
-		exit(0);
-	}
-	while (j <= map->wd)
-		map->z[i][j++] = 0;
+	ft_addalt(map, 0, i);
+
+	// read check
+	// i = 0;
+	// int j;
+	// while (i <= map->ht)
+	// {
+	// 	j = 0;
+	// 	while (j <= map->wd)
+	// 		printf("%d  ", map->alt[i][j++]);
+	// 	printf("\n");
+	// 	i++;
+	// }
 	close(fd);
 }
 
@@ -82,25 +105,24 @@ void ft_getdim(t_map *map, char *file)
 	char *line;
 	char **arr;
 
-	map->ht = 0;
 	fd = open(file, O_RDONLY);
+	if (fd == -1)
+		exit(0);
+	map->wd = 0;
+	map->ht = 0;
 	line = get_next_line(fd);
 	arr = ft_split(line, ' ');
-	map->wd = ft_getwidth((void **)arr);
-	while (line != 0)
+	ft_free((void **)arr);
+	while (arr[map->wd])
+		map->wd++;
+	while (line)
 	{
 		map->ht++;
 		free(line);
 		line = get_next_line(fd);
 	}
-	printf("height: %d\n", map->ht);
 	close(fd);
-}
-
-void ft_parsing(t_map *map, char *file)
-{
-	map->ha = 0;
-	map->la = 0;
-	ft_getdim(map, file);
-	ft_getz(map, file);
+	map->top = 0;
+	map->bottom = 0;
+	printf("Dimension [%d][%d]\n", map->wd, map->ht);
 }

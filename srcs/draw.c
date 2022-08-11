@@ -4,8 +4,11 @@ void ft_put_pixel(t_map *map, int x, int y, int color)
 {
 	char *ptr;
 
-	ptr = map->addr + (y * map->line_size + x * (map->bpp / 8));
-	*(unsigned int *)ptr = color;
+	if ((x >= 0 && x <= map->win_width) && (y >= 0 && y <= map->win_height))
+	{
+		ptr = map->addr + (y * map->line_size + x * (map->bpp / 8));
+		*(unsigned int *)ptr = color;
+	}
 }
 
 void ft_plotlow(t_map *map, t_line *line, int color)
@@ -17,7 +20,7 @@ void ft_plotlow(t_map *map, t_line *line, int color)
 		line->r = 1;
 		line->dy *= -1;
 	}
-	line->d = (2 * line->dy) - line->dx;
+	line->d = (2.0 * line->dy) - line->dx;
 	while (line->x0 <= line->x1)
 	{
 		ft_put_pixel(map, line->x0, line->y0, color);
@@ -28,10 +31,10 @@ void ft_plotlow(t_map *map, t_line *line, int color)
 				line->y0--;
 			else
 				line->y0++;
-			line->d += (2 * (line->dy - line->dx));
+			line->d += (2.0 * (line->dy - line->dx));
 		}
 		else
-			line->d += (2 * line->dy);
+			line->d += (2.0 * line->dy);
 	}
 }
 
@@ -44,7 +47,7 @@ void ft_plothigh(t_map *map, t_line *line, int color)
 		line->r = 1;
 		line->dx *= -1;
 	}
-	line->d = (2 * line->dx) - line->dy;
+	line->d = (2.0 * line->dx) - line->dy;
 	while (line->y0 <= line->y1)
 	{
 		ft_put_pixel(map, line->x0, line->y0, color);
@@ -55,24 +58,24 @@ void ft_plothigh(t_map *map, t_line *line, int color)
 				line->x0--;
 			else
 				line->x0++;
-			line->d += 2 * (line->dx - line->dy);
+			line->d += 2.0 * (line->dx - line->dy);
 		}
 		else
-			line->d += 2 * line->dx;
+			line->d += 2.0 * line->dx;
 	}
 }
 
 void ft_setline(t_map *map, t_ace ace, t_line *line, int r)
 {
-	int z;
+	float z;
 
 	if (r == -1)
-		z = map->alt[ace.i][ace.j + 1] * map->pa;
+		z = map->px[ace.i][ace.j + 1].alt * map->pa;
 	else
-		z = map->alt[ace.i + 1][ace.j] * map->pa;
-	line->x0 = map->x + (2 * map->size * ace.i) + (2 * map->size * ace.j);
-	line->y0 = map->y + (map->size * ace.i) - (map->size * ace.j) - (map->alt[ace.i][ace.j] * map->pa);
-	line->x1 = map->x + (2 * map->size * (ace.i + 1)) + (2 * map->size * ace.j);
+		z = map->px[ace.i + 1][ace.j].alt * map->pa;
+	line->x0 = map->x + (2.0 * map->size * ace.i) + (2.0 * map->size * ace.j);
+	line->y0 = map->y + (map->size * ace.i) - (map->size * ace.j) - (map->px[ace.i][ace.j].alt * map->pa);
+	line->x1 = map->x + (2.0 * map->size * (ace.i + 1)) + (2.0 * map->size * ace.j);
 	line->y1 = map->y + (map->size * ace.i) - (map->size * ace.j) + (r * map->size) - z;
 	line->d = 0;
 	line->r = 0;
@@ -80,7 +83,7 @@ void ft_setline(t_map *map, t_ace ace, t_line *line, int r)
 
 void	ft_swapvalue(t_line *line)
 {
-	int	a;
+	float	a;
 
 	a = line->x0;
 	line->x0 = line->x1;

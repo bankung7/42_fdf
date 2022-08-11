@@ -11,25 +11,51 @@ void ft_free(void **arr)
 	free(arr);
 }
 
+void	ft_color(t_map *map, int i, int j, char *px)
+{
+	int	x;
+	int	c;
+	int	pos;
+	char	color;
+	
+	x = 0;
+	c = 0;
+	pos = 0;
+	while (px[pos] && px[pos] != ',')
+		pos++;
+	if (pos > 0 && pos < (int)ft_strlen(px))
+	{
+		color = ft_toupper(px[ft_strlen(px) - x - 1]);
+		while (pos + 1 + x < (int)ft_strlen(px) - 2)
+		{
+			if (ft_isdigit(color) == 1)
+				c += (pow(16, x) * (color - '0'));
+			else if ((color - 'A') >= 0 && (color - 'A') <= 5)
+				c += (pow(16, x) * (color - 'A' + 10));
+			map->px[i][j].color = c;
+			x++;
+			color = ft_toupper(px[ft_strlen(px) - x - 1]);
+		}
+	}
+	else
+		map->px[i][j].color = (int)(0xffffff);
+}
+
 void ft_trackht(t_map *map, int i, int j)
 {
 	int value;
-	// char **attr;
 
-	value = (i - j) * map->size - map->alt[i][j] * map->pa;
-	if (value < map->top)
-		map->top = value;
-	if (value > map->bottom)
-		map->bottom = value;
-	if (map->alt[i][j] > map->highest)
-		map->highest = map->alt[i][j];
-	// if (ft_strchr(a, ',') >= 0)
-	// {
-	// 	attr = ft_split(a, ',');
-	// 	printf("%d\n", ft_atoi(attr[1]));
-	// 	map->color[i][j] = ft_atoi(attr[1]);
-	// 	ft_free((void**)attr);
-	// }	
+	value = (i - j) * map->size - map->px[i][j].alt * map->pa;
+	if (map->px[i][j].alt != 0)
+	{
+		// Something weird here for unin value
+		if (value < map->top)
+			map->top = value;
+		if (map->bottom && value > map->bottom)
+			map->bottom = value;
+		if (map->px[i][j].alt > map->highest)
+			map->highest = map->px[i][j].alt;
+	}
 }
 
 void ft_addalt(t_map *map, char *line, int i)
@@ -38,26 +64,27 @@ void ft_addalt(t_map *map, char *line, int i)
 	char **arr;
 
 	// ask for map->alt[i] -> free
-	map->alt[i] = malloc(sizeof(int) * map->wd + 1);
-	if (!map->alt[i])
+	map->px[i] = malloc(sizeof(t_px) * (map->wd + 1));
+	if (!map->px[i])
 		exit(0);
 	j = 0;
 	arr = ft_split(line, ' ');
 	if (line != 0)
 	{
-		while (arr[j])
+		while (j < map->wd && arr[j])
 		{
-			map->alt[i][j] = ft_atoi(arr[j]);
-			ft_trackht(map, i, j);
+			map->px[i][j].alt = ft_atoi(arr[j]);
+			// ft_trackht(map, i, j);
+	       		ft_color(map, i, j, arr[j]);
 			j++;
 		}
 	}
 	else
 	{
 		while (j < map->wd)
-			map->alt[i][j++] = 0;
+			map->px[i][j++].alt = 0;
 	}
-	map->alt[i][j] = 0;
+	//map->px[i][j].alt = 0;
 	ft_free((void **)arr);
 }
 
@@ -73,8 +100,9 @@ void ft_getalt(t_map *map, char *file)
 	if (fd == -1)
 		exit(0);
 	// ask for altitude -> free
-	map->alt = malloc(sizeof(int *) * map->ht + 1);
-	if (!map->alt)
+	map->top = 0;
+	map->px = malloc(sizeof(t_px*) * (map->ht + 1));
+	if (!map->px)
 		exit(0);
 	line = get_next_line(fd);
 	while (line)
@@ -112,9 +140,9 @@ void ft_getdim(t_map *map, char *file)
 	map->ht = 0;
 	line = get_next_line(fd);
 	arr = ft_split(line, ' ');
-	ft_free((void **)arr);
 	while (arr[map->wd])
 		map->wd++;
+	ft_free((void **)arr);
 	while (line)
 	{
 		map->ht++;
@@ -122,7 +150,4 @@ void ft_getdim(t_map *map, char *file)
 		line = get_next_line(fd);
 	}
 	close(fd);
-	map->top = 0;
-	map->bottom = 0;
-	printf("Dimension [%d][%d]\n", map->wd, map->ht);
 }

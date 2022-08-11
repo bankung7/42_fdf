@@ -28,6 +28,12 @@ typedef struct s_line
 	float r;
 } t_line;
 
+typedef struct s_px
+{
+	int	alt;
+	int	color;
+}	t_px;
+
 typedef struct s_map
 {
 	void *mlx;
@@ -41,8 +47,7 @@ typedef struct s_map
 	int win_height;
 	int wd;
 	int ht;
-	int **alt;
-	int	**color;
+	t_px **px;
 	float size;
 	float pa;
 	int top;
@@ -55,6 +60,7 @@ typedef struct s_map
 // parsing.c
 void ft_getdim(t_map *map, char *file);
 void ft_getalt(t_map *map, char *file);
+void	ft_free(void **arr);
 
 // setup.c
 void ft_setup(t_map *map);

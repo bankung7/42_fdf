@@ -7,7 +7,7 @@ N = \033[0m
 NAME = fdf
 
 # CC
-CC = gcc
+CC = gcc -g
 CFLAGS = -Wall -Werror -Wextra
 
 # INC
@@ -37,15 +37,15 @@ OBJS = $(addprefix $(OBJS_DIR),$(SRCS:.c=.o))
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	@$(CC) $(CFLAGS) $^ $(MLX) $(MLX_FLAGS) -o $@
-#	@$(CC) $(CFLAGS) $^ $(MLX_LINUX) $(MLX_FLAGS_LINUX) -o $@
+#	@$(CC) $(CFLAGS) $^ $(MLX) $(MLX_FLAGS) -o $@
+	@$(CC) $(CFLAGS) $^ $(MLX_LINUX) $(MLX_FLAGS_LINUX) -o $@
 	@echo "$(G)fdf is ready$(N)"
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@echo "$(Y)compling [$@]$(N)"
 	@mkdir -p $(OBJS_DIR)
-	@$(CC) $(CFLAGS) $(MLX_INC) $(INC) -c $< -o $@
-#	@$(CC) $(CFLAGS) $(MLX_INC_LINUX) $(INC) -c $< -o $@
+#	@$(CC) $(CFLAGS) $(MLX_INC) $(INC) -c $< -o $@
+	@$(CC) $(CFLAGS) $(MLX_INC_LINUX) $(INC) -c $< -o $@
 	@printf "\033[A \033[K"
 
 $(LIBFT):

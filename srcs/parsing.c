@@ -74,7 +74,7 @@ void ft_addalt(t_map *map, char *line, int i)
 		while (j < map->wd && arr[j])
 		{
 			map->px[i][j].alt = ft_atoi(arr[j]);
-			// ft_trackht(map, i, j);
+			ft_trackht(map, i, j);
 	       		ft_color(map, i, j, arr[j]);
 			j++;
 		}
@@ -112,18 +112,6 @@ void ft_getalt(t_map *map, char *file)
 		line = get_next_line(fd);
 	}
 	ft_addalt(map, 0, i);
-
-	// read check
-	// i = 0;
-	// int j;
-	// while (i <= map->ht)
-	// {
-	// 	j = 0;
-	// 	while (j <= map->wd)
-	// 		printf("%d  ", map->alt[i][j++]);
-	// 	printf("\n");
-	// 	i++;
-	// }
 	close(fd);
 }
 

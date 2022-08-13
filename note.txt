@@ -14,3 +14,10 @@
 
 ///// Phase 4 /////
 4.1 Loop
+
+// Bonus
+1. Extra Projection
+2. Zoom in and out
+3. Translate
+4. Rotate
+5. Altitude adjusting

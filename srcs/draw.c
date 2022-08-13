@@ -4,15 +4,18 @@ void ft_put_pixel(t_map *map, int x, int y, int color)
 {
 	char *ptr;
 
-	if ((x >= 0 && x <= map->win_width) && (y >= 0 && y <= map->win_height))
+	if ((x >= 0 && x < map->win_width) && (y >= 0 && y < map->win_height))
 	{
 		ptr = map->addr + (y * map->line_size + x * (map->bpp / 8));
 		*(unsigned int *)ptr = color;
 	}
 }
 
-void ft_plotlow(t_map *map, t_line *line, int color)
+void ft_plotlow(t_map *map, t_line *line, int color, int color2)
 {
+	int mid;
+
+	mid = fabsf((line->x1 - line->x0) / 2);
 	line->dx = line->x1 - line->x0;
 	line->dy = line->y1 - line->y0;
 	if (line->dy < 0)
@@ -21,9 +24,12 @@ void ft_plotlow(t_map *map, t_line *line, int color)
 		line->dy *= -1;
 	}
 	line->d = (2.0 * line->dy) - line->dx;
-	while (line->x0 <= line->x1)
+	while (line->x0 < map->win_width && line->x0 <= line->x1)
 	{
-		ft_put_pixel(map, line->x0, line->y0, color);
+		if (mid-- > 0)
+			ft_put_pixel(map, line->x0, line->y0, color);
+		else
+			ft_put_pixel(map, line->x0, line->y0, color2);
 		line->x0++;
 		if (line->d > 0)
 		{
@@ -38,8 +44,11 @@ void ft_plotlow(t_map *map, t_line *line, int color)
 	}
 }
 
-void ft_plothigh(t_map *map, t_line *line, int color)
+void ft_plothigh(t_map *map, t_line *line, int color, int color2)
 {
+	int mid;
+
+	mid = fabs((line->y1 - line->y0) / 2);
 	line->dx = line->x1 - line->x0;
 	line->dy = line->y1 - line->y0;
 	if (line->dx < 0)
@@ -50,7 +59,10 @@ void ft_plothigh(t_map *map, t_line *line, int color)
 	line->d = (2.0 * line->dx) - line->dy;
 	while (line->y0 <= line->y1)
 	{
-		ft_put_pixel(map, line->x0, line->y0, color);
+		if (mid-- > 0)
+			ft_put_pixel(map, line->x0, line->y0, color);
+		else
+			ft_put_pixel(map, line->x0, line->y0, color2);
 		line->y0++;
 		if (line->d >= 0)
 		{
@@ -81,9 +93,9 @@ void ft_setline(t_map *map, t_ace ace, t_line *line, int r)
 	line->r = 0;
 }
 
-void	ft_swapvalue(t_line *line)
+void ft_swapvalue(t_line *line)
 {
-	float	a;
+	float a;
 
 	a = line->x0;
 	line->x0 = line->x1;
@@ -103,19 +115,19 @@ void ft_plotline(t_map *map, t_ace ace, int r, int color)
 		if (line.x0 > line.x1)
 		{
 			ft_swapvalue(&line);
-			ft_plotlow(map, &line, color);
+			ft_plotlow(map, &line, color, map->px[ace.i][ace.j + 1].color);
 		}
 		else
-			ft_plotlow(map, &line, color);
+			ft_plotlow(map, &line, color, color);
 	}
 	else
 	{
 		if (line.y0 > line.y1)
 		{
 			ft_swapvalue(&line);
-			ft_plothigh(map, &line, color);
+			ft_plothigh(map, &line, color, map->px[ace.i + 1][ace.j].color);
 		}
 		else
-			ft_plothigh(map, &line, color);
+			ft_plothigh(map, &line, color, map->px[ace.i + 1][ace.j].color);
 	}
 }

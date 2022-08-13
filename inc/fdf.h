@@ -55,7 +55,14 @@ typedef struct s_map
 	int	highest;
 	float	x;
 	float	y;
+	int kb;
 } t_map;
+
+// fdf.c
+void ft_draw(t_map *map);
+
+// keyhook.c
+int	ft_keyhook(int keycode, t_map *map);
 
 // parsing.c
 void ft_getdim(t_map *map, char *file);
@@ -64,6 +71,7 @@ void	ft_free(void **arr);
 
 // setup.c
 void ft_setup(t_map *map);
+void ft_drawbg(t_map *map);
 
 // draw.c
 void ft_put_pixel(t_map *map, int x, int y, int color);

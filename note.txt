@@ -1,23 +1,30 @@
-///// Phase 1 /////
-1.1 Check arg
-1.2 Input
+fdft/note.txt// Phase 1 : Read
+- get width and height
+- ge memmory for **px
+    - px structure consist of 
+        - (int) for altitude aka "z"
+        - (int) for color
+- read file again and get number int to **px array and color
 
-///// Phase 2 /////
-2.1 Intiate mlx
-2.2 Build window
-2.3 Build image
-2.4 Set data_addr
+// Phase 2 : Draw
+- use bresenham method to Draw
+- connect dot to the right and down
 
-//// Phase 3 /////
-3.1 Draw
-3.2 Put image to window
+// Phase 3 : 3D adjusting
+x` = (x - y) * cos(angle)
+y` = (x + y) * sin(angle) - z
+z = (int) in px
 
-///// Phase 4 /////
-4.1 Loop
+// Phase 4 : Bonus
+- more projection (Parallel or conic)
+- zoom in/out
+- translate
+- rotate
+- altitude adjusting or inversed color
 
-// Bonus
-1. Extra Projection
-2. Zoom in and out
-3. Translate
-4. Rotate
-5. Altitude adjusting
+// Phase 5 : Error handling
+- argc != 2
+- file exist?
+- have no right to open or does not .fdf
+
+// Phase 6: Leak handling

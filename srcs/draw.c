@@ -2,132 +2,75 @@
 
 void ft_put_pixel(t_map *map, int x, int y, int color)
 {
-	char *ptr;
+    char *ptr;
 
-	if ((x >= 0 && x < map->win_width) && (y >= 0 && y < map->win_height))
-	{
-		ptr = map->addr + (y * map->line_size + x * (map->bpp / 8));
-		*(unsigned int *)ptr = color;
-	}
+    ptr = map->img.addr + (y * map->img.line_size) + (x * (map->img.bpp / 8));
+    *(unsigned int *)ptr = color;
 }
 
-void ft_plotlow(t_map *map, t_line *line, int color, int color2)
+void ft_drawbg(t_map *map, int color)
 {
-	int mid;
+    int i;
+    int j;
 
-	mid = fabsf((line->x1 - line->x0) / 2);
-	line->dx = line->x1 - line->x0;
-	line->dy = line->y1 - line->y0;
-	if (line->dy < 0)
-	{
-		line->r = 1;
-		line->dy *= -1;
-	}
-	line->d = (2.0 * line->dy) - line->dx;
-	while (line->x0 < map->win_width && line->x0 <= line->x1)
-	{
-		if (mid-- > 0)
-			ft_put_pixel(map, line->x0, line->y0, color);
-		else
-			ft_put_pixel(map, line->x0, line->y0, color2);
-		line->x0++;
-		if (line->d > 0)
-		{
-			if (line->r == 1)
-				line->y0--;
-			else
-				line->y0++;
-			line->d += (2.0 * (line->dy - line->dx));
-		}
-		else
-			line->d += (2.0 * line->dy);
-	}
+    i = 0;
+    ft_printf("Drawing bg\n");
+    while (i < map->w_height)
+    {
+        j = 0;
+        while (j < map->w_width)
+            ft_put_pixel(map, i, j++, color);
+        i++;
+    }
 }
 
-void ft_plothigh(t_map *map, t_line *line, int color, int color2)
+// void ft_linelow(x0, y0, x1, y1)
+// {
+//     dx = x1 - x0;
+//     dy = y1 - y0;
+//     yi = 1;
+//     if (dy < 0)
+//     {
+//         yi = -1;
+//         dy = -dy;
+//     }
+//     D = (2 * dy) - dx;
+//     y = y0;
+//     while (x < x1)
+//     {
+//         ft_put_pixel(x, y);
+//         if (D > 0)
+//         {
+//             y++;
+//             D = D + (2 * (dy - dx));
+//         }
+//         else
+//             D = D + 2 * dy;
+//         x++;
+//     }
+// }
+
+void ft_drawline(t_map *map, float x1, float y1)
 {
-	int mid;
+    printf("(%.2f, %.2f) -> (%.2f, %.2f)\n", map->x * map->zoom, map->y * map->zoom, x1 * map->zoom, y1 * map->zoom);
 
-	mid = fabs((line->y1 - line->y0) / 2);
-	line->dx = line->x1 - line->x0;
-	line->dy = line->y1 - line->y0;
-	if (line->dx < 0)
-	{
-		line->r = 1;
-		line->dx *= -1;
-	}
-	line->d = (2.0 * line->dx) - line->dy;
-	while (line->y0 <= line->y1)
-	{
-		if (mid-- > 0)
-			ft_put_pixel(map, line->x0, line->y0, color);
-		else
-			ft_put_pixel(map, line->x0, line->y0, color2);
-		line->y0++;
-		if (line->d >= 0)
-		{
-			if (line->r == 1)
-				line->x0--;
-			else
-				line->x0++;
-			line->d += 2.0 * (line->dx - line->dy);
-		}
-		else
-			line->d += 2.0 * line->dx;
-	}
-}
-
-void ft_setline(t_map *map, t_ace ace, t_line *line, int r)
-{
-	float z;
-
-	if (r == -1)
-		z = map->px[ace.i][ace.j + 1].alt * map->pa;
-	else
-		z = map->px[ace.i + 1][ace.j].alt * map->pa;
-	line->x0 = map->x + (2.0 * map->size * ace.i) + (2.0 * map->size * ace.j);
-	line->y0 = map->y + (map->size * ace.i) - (map->size * ace.j) - (map->px[ace.i][ace.j].alt * map->pa);
-	line->x1 = map->x + (2.0 * map->size * (ace.i + 1)) + (2.0 * map->size * ace.j);
-	line->y1 = map->y + (map->size * ace.i) - (map->size * ace.j) + (r * map->size) - z;
-	line->d = 0;
-	line->r = 0;
-}
-
-void ft_swapvalue(t_line *line)
-{
-	float a;
-
-	a = line->x0;
-	line->x0 = line->x1;
-	line->x1 = a;
-	a = line->y0;
-	line->y0 = line->y1;
-	line->y1 = a;
-}
-
-void ft_plotline(t_map *map, t_ace ace, int r, int color)
-{
-	t_line line;
-
-	ft_setline(map, ace, &line, r);
-	if (fabsf(line.y1 - line.y0) < fabsf(line.x1 - line.x0))
-	{
-		if (line.x0 > line.x1)
-		{
-			ft_swapvalue(&line);
-			ft_plotlow(map, &line, color, map->px[ace.i][ace.j + 1].color);
-		}
-		else
-			ft_plotlow(map, &line, color, color);
-	}
-	else
-	{
-		if (line.y0 > line.y1)
-		{
-			ft_swapvalue(&line);
-			ft_plothigh(map, &line, color, map->px[ace.i + 1][ace.j].color);
-		}
-		else
-			ft_plothigh(map, &line, color, map->px[ace.i + 1][ace.j].color);
-	}
+    while (map->y < y1 * map->zoom)
+    {
+        ft_put_pixel(map, map->x, map->y, 0xffffff);
+        map->y++;
+    }
+    // if (fabsf(y1 - map->y) < fabsf(x1 - map->x))
+    // {
+    //     if (x0 > x1)
+    //         ft_linelow(x1, y1, x0, y0);
+    //     else
+    //         ft_linelow(x0, y0, x1, y1);
+    // }
+    // else
+    // {
+    //     if (y0 > y1)
+    //         ft_linehigh(x1, y1, x0, y0);
+    //     else
+    //         ft_linehigh(x0, y0, x1, y1);
+    // }
 }

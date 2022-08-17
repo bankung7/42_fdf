@@ -38,6 +38,12 @@ typedef struct s_img
 	int endian;
 } t_img;
 
+typedef struct s_ace
+{
+	int	i;
+	int	j;
+}	t_ace;
+
 typedef struct s_map
 {
 	void *mlx;
@@ -48,19 +54,20 @@ typedef struct s_map
 	int w_width;
 	int	w_height;
 	t_px **px;
-	float	xo;
-	float	yo;
 	float	x;
 	float	y;
 	float	zoom;
+	float	seta;
+	float	pa;
 } t_map;
 
 // fdf.c
+int ft_draw(t_map *map);
 void ft_drawbg(t_map *map, int color);
 
 // draw.c
 void ft_put_pixel(t_map *map, int x, int y, int color);
-void ft_drawline(t_map *map, float x1, float y1);
+void ft_drawline(t_map *map, t_ace *ace, float x1, float y1);
 
 // parsing.c
 int ft_getdim(t_map *map, char *file);

@@ -29,7 +29,7 @@ LIBFT = libft/libft.a
 RM = rm -rf
 
 SRCS_DIR = srcs/
-SRCS = fdf.c parsing.c draw.c exit.c hook.c
+SRCS = fdf.c parsing.c draw.c exit.c hook.c matrix.c
 
 OBJS_DIR = objs/
 OBJS = $(addprefix $(OBJS_DIR),$(SRCS:.c=.o))

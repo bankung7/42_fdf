@@ -14,7 +14,6 @@ void ft_drawbg(t_map *map, int color)
     int j;
 
     i = 0;
-    ft_printf("Drawing bg\n");
     while (i < map->w_height)
     {
         j = 0;
@@ -22,11 +21,11 @@ void ft_drawbg(t_map *map, int color)
             ft_put_pixel(map, i, j++, color);
         i++;
     }
+    mlx_put_image_to_window(map->mlx, map->win, map->img.ptr, 0, 0);
 }
 
 void ft_linehigh(t_map *map, t_line *line)
 {
-    float x;
     float xi;
 
     line->dx = line->x1 - line->x0;
@@ -38,14 +37,15 @@ void ft_linehigh(t_map *map, t_line *line)
         line->dx = -line->dx;
     }
     line->p = (2.0 * line->dx) - line->dy;
-    x = line->x0;
     while (line->y0 < line->y1)
     {
-        if (x >= 0 && x < map->w_width && line->y0 >= 0 && line->y0 < map->w_height)
-            ft_put_pixel(map, x, line->y0, 0xFF000F);
+        if (line->x0 >= 0 && line->x0 < map->w_width && line->y0 >= 0 && line->y0 < map->w_height)
+        {
+            ft_put_pixel(map, line->x0, line->y0, line->color0);
+        }
         if (line->p > 0)
         {
-            x += xi;
+            line->x0 += xi;
             line->p += (2.0 * (line->dx - line->dy));
         }
         else
@@ -56,7 +56,6 @@ void ft_linehigh(t_map *map, t_line *line)
 
 void ft_linelow(t_map *map, t_line *line)
 {
-    float y;
     float yi;
 
     line->dx = line->x1 - line->x0;
@@ -68,14 +67,15 @@ void ft_linelow(t_map *map, t_line *line)
         line->dy = -line->dy;
     }
     line->p = (2.0 * line->dy) - line->dx;
-    y = line->y0;
     while (line->x0 < line->x1)
     {
-        if (line->x0 >= 0 && line->x0 < map->w_width && y >= 0 && y < map->w_height)
-            ft_put_pixel(map, line->x0, y, 0xFFFFFF);
+        if (line->x0 >= 0 && line->x0 < map->w_width && line->y0 >= 0 && line->y0 < map->w_height)
+        {
+            ft_put_pixel(map, line->x0, line->y0, line->color0);
+        }
         if (line->p > 0)
         {
-            y += yi;
+            line->y0 += yi;
             line->p += (2.0 * (line->dy - line->dx));
         }
         else
@@ -84,9 +84,10 @@ void ft_linelow(t_map *map, t_line *line)
     }
 }
 
-void ft_swap(t_line *line)
+void ft_swap(t_line *line, void (*f)(t_map *, t_line *), t_map *map)
 {
     int x;
+    unsigned int c;
 
     x = line->x0;
     line->x0 = line->x1;
@@ -94,37 +95,37 @@ void ft_swap(t_line *line)
     x = line->y0;
     line->y0 = line->y1;
     line->y1 = x;
+    c = line->color0;
+    line->color0 = line->color1;
+    line->color1 = c;
+    f(map, line);
 }
 
 void ft_drawline(t_map *map, t_ace *ace, float x1, float y1)
 {
-    float st;
     t_line line;
 
-    st = map->seta * 22. / 7. / 180.;
-    line.x0 = map->x + (ace->i + ace->j) * map->zoom * cos(st);
-    line.y0 = map->y + (ace->i - ace->j) * map->zoom * sin(st) - map->px[ace->i][ace->j].z * map->pa;
-    line.x1 = map->x + (x1 + y1) * map->zoom * cos(st);
-    line.y1 = map->y + (x1 - y1) * map->zoom * sin(st) - map->px[(int)x1][(int)y1].z * map->pa;
-
+    line.x0 = ace->j - map->lenx;
+    line.y0 = ace->i - map->leny;
+    line.z0 = map->px[ace->i][ace->j].z;
+    line.color0 = map->px[ace->i][ace->j].color;
+    line.x1 = x1 - map->lenx;
+    line.y1 = y1 - map->leny;
+    line.z1 = map->px[(int)y1][(int)x1].z;
+    line.color1 = map->px[ace->i][ace->j].color;
+    ft_2d(map, &line);
     // printf("[%.2f][%.2f] -> [%.2f][%.2f]\n", line.x0, line.y0, line.x1, line.y1);
     if (fabsf(line.y1 - line.y0) < fabsf(line.x1 - line.x0))
     {
         if (line.x0 > line.x1)
-        {
-            ft_swap(&line);
-            ft_linelow(map, &line);
-        }
+            ft_swap(&line, ft_linelow, map);
         else
             ft_linelow(map, &line);
     }
     else
     {
         if (line.y0 > line.y1)
-        {
-            ft_swap(&line);
-            ft_linehigh(map, &line);
-        }
+            ft_swap(&line, ft_linehigh, map);
         else
             ft_linehigh(map, &line);
     }

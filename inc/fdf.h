@@ -12,6 +12,13 @@
 
 #include <stdio.h>
 
+typedef struct s_mtx
+{
+	float x;
+	float y;
+	float z;
+} t_mtx;
+
 typedef struct s_px
 {
 	int z;
@@ -20,14 +27,18 @@ typedef struct s_px
 
 typedef struct s_line
 {
-	float	x0;
-	float	y0;
-	float	x1;
-	float	y1;
-	float	dx;
-	float	dy;
-	float	p;
-}	t_line;
+	float x0;
+	float y0;
+	float x1;
+	float y1;
+	float dx;
+	float dy;
+	float p;
+	float z0;
+	float z1;
+	unsigned int color0;
+	unsigned int color1;
+} t_line;
 
 typedef struct s_img
 {
@@ -40,9 +51,9 @@ typedef struct s_img
 
 typedef struct s_ace
 {
-	int	i;
-	int	j;
-}	t_ace;
+	int i;
+	int j;
+} t_ace;
 
 typedef struct s_map
 {
@@ -52,13 +63,18 @@ typedef struct s_map
 	int vw;
 	int vh;
 	int w_width;
-	int	w_height;
+	int w_height;
+	float rx;
+	float ry;
+	float rz;
 	t_px **px;
-	float	x;
-	float	y;
-	float	zoom;
-	float	seta;
-	float	pa;
+	float pa;
+	float scale;
+	float x;
+	float y;
+	float lenx;
+	float leny;
+
 } t_map;
 
 // fdf.c
@@ -81,5 +97,8 @@ int ft_read(t_map *map);
 // hook.c
 int ft_close(t_map *map);
 int ft_keyhook(int keycode, t_map *map);
+
+// matrix.c
+void ft_2d(t_map *map, t_line *line);
 
 #endif

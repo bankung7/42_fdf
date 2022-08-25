@@ -12,12 +12,17 @@
 
 #include <stdio.h>
 
-typedef struct s_mtx
+
+typedef struct s_color
 {
-	float x;
-	float y;
-	float z;
-} t_mtx;
+	int r0;
+	int g0;
+	int b0;
+	int r1;
+	int g1;
+	int b1;
+	float step;
+}	t_color;
 
 typedef struct s_px
 {
@@ -27,17 +32,19 @@ typedef struct s_px
 
 typedef struct s_line
 {
+	float x;
+	float y;
 	float x0;
 	float y0;
 	float x1;
 	float y1;
+	float z0;
+	float z1;
 	float dx;
 	float dy;
 	float p;
-	float z0;
-	float z1;
-	unsigned int color0;
-	unsigned int color1;
+	int color0;
+	int color1;
 } t_line;
 
 typedef struct s_img
@@ -79,7 +86,6 @@ typedef struct s_map
 
 // fdf.c
 int ft_draw(t_map *map);
-void ft_drawbg(t_map *map, int color);
 
 // draw.c
 void ft_put_pixel(t_map *map, int x, int y, int color);
@@ -100,5 +106,11 @@ int ft_keyhook(int keycode, t_map *map);
 
 // matrix.c
 void ft_2d(t_map *map, t_line *line);
+
+// setup.c
+int ft_setup(t_map *map);
+void ft_drawbg(t_map *map, int color);
+void ft_menu(t_map *map);
+int ft_mixcolor(t_line *line, float pos);
 
 #endif

@@ -1,41 +1,11 @@
 #include "fdf.h"
 
-int ft_setup(t_map *map)
-{
-    map->rx = 45;
-    map->ry = 35;
-    map->rz = 330;
-    map->w_width = 800;
-    map->w_height = 800;
-    if (map->vw > map->vh)
-        map->scale = (float)map->w_width / (float)(map->vw + map->vh);
-    else
-        map->scale = (float)map->w_height / (float)(map->vw + map->vh);
-    map->lenx = (float)map->vw / 2.;
-    map->leny = (float)map->vh / 2.;
-    map->x = map->w_width / 2.;
-    map->y = map->w_height / 2.;
-    map->pa = 1;
-    return (0);
-}
-
-void ft_menu(t_map *map)
-{
-   mlx_string_put(map->mlx, map->win, 20, 20, 0xFFFFFF, "Rx : q or e");
-   mlx_string_put(map->mlx, map->win, 20, 40, 0xFFFFFF, "Ry : a or d");
-   mlx_string_put(map->mlx, map->win, 20, 60, 0xFFFFFF, "Rz : z or c");
-   mlx_string_put(map->mlx, map->win, 20, 80, 0xFFFFFF, "Reset center : o");
-   mlx_string_put(map->mlx, map->win, 20, 100, 0xFFFFFF, "Parallel : p");
-   mlx_string_put(map->mlx, map->win, 20, 120, 0xFFFFFF, "Isometric : i");
-   mlx_string_put(map->mlx, map->win, 20, 140, 0xFFFFFF, "Zoom : [ or ]");
-}
-
 int ft_draw(t_map *map)
 {
     t_ace ace;
 
-    ft_drawbg(map, 0x0);
     ace.i = 0;
+    ft_drawbg(map, 0x0);
     while (ace.i < map->vh)
     {
         ace.j = 0;

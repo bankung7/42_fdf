@@ -16,7 +16,7 @@ int ft_exit(char *str, t_map *map, int n)
     int i;
 
     i = 0;
-    if (map->px)
+    if (map && map->px)
     {
         while (i < map->vh)
             free(map->px[i++]);

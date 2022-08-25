@@ -8,7 +8,7 @@ int ft_close(t_map *map)
 
 int ft_move(int keycode, t_map *map)
 {
-    if (keycode == 123 && map->x + map->scale < map->w_width)
+    if (keycode == 123)
         map->x += map->scale;
     else if (keycode == 124 && map->x + map->scale > 0)
         map->x -= map->scale;
@@ -52,7 +52,6 @@ int ft_rotate(int keycode, t_map *map)
         map->rz += 5;
     else if (keycode == 8)
         map->rz -= 5;
-    ft_drawbg(map, 0x0);
     ft_draw(map);
     return (0);
 }

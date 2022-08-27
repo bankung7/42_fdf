@@ -3,13 +3,12 @@
 void	ft_color(t_map *map, int i, int j, char *px)
 {
 	int		x;
-	int		c;
 	int		pos;
 	char	color;
 
 	x = 0;
-	c = 0;
 	pos = 0;
+	map->px[i][j].color = 0;
 	while (px[pos] && px[pos] != ',')
 		pos++;
 	if (pos > 0 && pos < (int)ft_strlen(px))
@@ -18,10 +17,9 @@ void	ft_color(t_map *map, int i, int j, char *px)
 		while (pos + 1 + x < (int)ft_strlen(px) - 2)
 		{
 			if (ft_isdigit(color) == 1)
-				c += (pow(16, x) * (color - '0'));
+				map->px[i][j].color += (pow(16, x) * (color - '0'));
 			else if ((color - 'A') >= 0 && (color - 'A') <= 5)
-				c += (pow(16, x) * (color - 'A' + 10));
-			map->px[i][j].color = c;
+				map->px[i][j].color += (pow(16, x) * (color - 'A' + 10));
 			x++;
 			color = ft_toupper(px[ft_strlen(px) - x - 1]);
 		}
@@ -32,8 +30,8 @@ void	ft_color(t_map *map, int i, int j, char *px)
 
 int	ft_getz(t_map *map, char *line, int i)
 {
-	int	j;
-	char **arr;
+	int		j;
+	char	**arr;
 
 	map->px[i] = malloc(sizeof(t_px) * (map->vw));
 	if (!map->px[i])
@@ -52,11 +50,11 @@ int	ft_getz(t_map *map, char *line, int i)
 	return (0);
 }
 
-int ft_getpx(t_map *map, char *file)
+int	ft_getpx(t_map *map, char *file)
 {
-	int i;
-	int fd;
-	char *line;
+	int		i;
+	int		fd;
+	char	*line;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
@@ -76,11 +74,11 @@ int ft_getpx(t_map *map, char *file)
 	return (0);
 }
 
-int ft_getdim(t_map *map, char *file)
+int	ft_getdim(t_map *map, char *file)
 {
-	int fd;
-	char *line;
-	char **arr;
+	int		fd;
+	char	*line;
+	char	**arr;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)

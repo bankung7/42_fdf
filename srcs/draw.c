@@ -4,7 +4,11 @@ void	ft_put_pixel(t_map *map, int x, int y, int color)
 {
 	char	*ptr;
 
+	if (x < 0 || x >= map->w_width || y < 0 || y >= map->w_height)
+		return ;
 	ptr = map->img.addr + (y * map->img.line_size) + (x * (map->img.bpp / 8));
+	if (map->inverse == 1)
+		color = ft_inversecolor(color);
 	*(unsigned int *)ptr = color;
 }
 
@@ -24,8 +28,7 @@ void	ft_linehigh(t_map *map, t_line *line)
 	line->p = (2.0 * line->dx) - line->dy;
 	while (line->y < line->y1)
 	{
-		if (line->x0 >= 0 && line->x0 < map->w_width && line->y >= 0 && line->y < map->w_height)
-			ft_put_pixel(map, line->x0, line->y, ft_mixcolor(line, fabsf(line->y - line->y0)));
+		ft_checkedge(map, line, line->x0, line->y);
 		if (line->p > 0)
 		{
 			line->x0 += xi;
@@ -53,8 +56,7 @@ void	ft_linelow(t_map *map, t_line *line)
 	line->p = (2.0 * line->dy) - line->dx;
 	while (line->x < line->x1)
 	{
-		if (line->x >= 0 && line->x < map->w_width && line->y0 >= 0 && line->y0 < map->w_height)
-			ft_put_pixel(map, line->x, line->y0, ft_mixcolor(line, fabsf(line->x - line->x0)));
+		ft_checkedge(map, line, line->x, line->y0);
 		if (line->p > 0)
 		{
 			line->y0 += yi;
@@ -68,8 +70,7 @@ void	ft_linelow(t_map *map, t_line *line)
 
 void	ft_swap(t_line *line, void (*f)(t_map *, t_line *), t_map *map)
 {
-	int				x;
-	unsigned int	c;
+	int	x;
 
 	x = line->x0;
 	line->x0 = line->x1;
@@ -77,9 +78,9 @@ void	ft_swap(t_line *line, void (*f)(t_map *, t_line *), t_map *map)
 	x = line->y0;
 	line->y0 = line->y1;
 	line->y1 = x;
-	c = line->color0;
+	x = line->color0;
 	line->color0 = line->color1;
-	line->color1 = c;
+	line->color1 = x;
 	f(map, line);
 }
 

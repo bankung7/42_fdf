@@ -86,8 +86,13 @@ void	ft_2d(t_map *map, t_line *line)
 	ft_rotx(map, line);
 	ft_roty(map, line);
 	ft_rotz(map, line);
-	line->x0 = (line->x0 * map->scale) + map->x;
-	line->y0 = (line->y0 * map->scale) + map->y;
-	line->x1 = (line->x1 * map->scale) + map->x;
-	line->y1 = (line->y1 * map->scale) + map->y;
+	//ft_isometric(line);
+	line->x0 += map->offsetx;
+	line->y0 += map->offsety;
+	line->x1 += map->offsetx;
+	line->y1 += map->offsety;
+	line->x0 = (line->x0 * map->scale) + (map->w_width / 2.);
+	line->y0 = (line->y0 * map->scale) + (map->w_height / 2.);
+	line->x1 = (line->x1 * map->scale) + (map->w_width / 2.);
+	line->y1 = (line->y1 * map->scale) + (map->w_height / 2.);
 }

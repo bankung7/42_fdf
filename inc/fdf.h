@@ -74,8 +74,8 @@ typedef struct s_map
 	t_px	**px;
 	float	pa;
 	float	scale;
-	float	x;
-	float	y;
+	int		offsetx;
+	int		offsety;
 	float	lenx;
 	float	leny;
 	int		inverse;

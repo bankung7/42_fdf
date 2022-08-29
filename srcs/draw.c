@@ -88,12 +88,12 @@ void	ft_drawline(t_map *map, t_ace *ace, float x1, float y1)
 {
 	t_line	line;
 
-	line.x0 = ace->j - map->lenx;
-	line.y0 = ace->i - map->leny;
+	line.x0 = ace->j - (map->vw / 2.);
+	line.y0 = ace->i - (map->vh / 2.);
 	line.z0 = map->px[ace->i][ace->j].z;
 	line.color0 = map->px[ace->i][ace->j].color;
-	line.x1 = x1 - map->lenx;
-	line.y1 = y1 - map->leny;
+	line.x1 = x1 - (map->vw / 2.);
+	line.y1 = y1 - (map->vh / 2.);
 	line.z1 = map->px[(int)y1][(int)x1].z;
 	line.color1 = map->px[(int)y1][(int)x1].color;
 	ft_2d(map, &line);

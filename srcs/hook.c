@@ -1,4 +1,5 @@
 #include "fdf.h"
+#include <stdio.h>
 
 int	ft_close(t_map *map)
 {
@@ -8,18 +9,18 @@ int	ft_close(t_map *map)
 
 int	ft_move(int keycode, t_map *map)
 {
-	if (keycode == 123)
-		map->x += map->scale;
-	else if (keycode == 124)
-		map->x -= map->scale;
-	else if (keycode == 125)
-		map->y -= map->scale;
-	else if (keycode == 126)
-		map->y += map->scale;
+	if (keycode == 123 && map->offsetx - (map->lenx / 2.) + 1 <= 0)
+		map->offsetx++;
+	else if (keycode == 124 && map->offsetx + (map->lenx / 2.) - 1 >= 0)
+		map->offsetx--;
+	else if (keycode == 125 && map->offsety + (map->leny / 2.) - 1 >= 0)
+		map->offsety--;
+	else if (keycode == 126 && map->offsety - (map->leny / 2.) + 1 <= 0)
+		map->offsety++;
 	else if (keycode == 31)
 	{
-		map->x = map->w_width / 2.;
-		map->y = map->w_height / 2.;
+		map->offsetx = 0;
+		map->offsety = 0;
 	}
 	ft_draw(map);
 	return (0);
@@ -45,6 +46,7 @@ int	ft_rotate(int keycode, t_map *map)
 		map->rx = (((int)map->rx % 360) + 5);
 	else if (keycode == 6)
 		map->rz = (((int)map->rz % 360) + 5);
+	printf("[%.2f][%.2f][%.2f]\n", map->rx, map->ry, map->rz);
 	ft_draw(map);
 	return (0);
 }

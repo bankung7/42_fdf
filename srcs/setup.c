@@ -2,15 +2,18 @@
 
 int	ft_setup(t_map *map)
 {
+	float	v;
+
+	v = 3.1416 / 180.;
 	map->rx = 45;
 	map->ry = 35;
-	map->rz = -30;
+	map->rz = 330;
 	map->w_width = 800;
 	map->w_height = 800;
-	map->lenx = map->vw / 2.;
-	map->leny = map->vh / 2.;
-	map->x = map->w_width / 2.;
-	map->y = map->w_height / 2.;
+	map->lenx = (map->vw * cos(45 * v)) + (map->vh * sin(45 * v));
+	map->leny = (map->vw * sin(45 * v)) + (map->vh * cos(45 * v));
+	map->offsetx = 0;
+	map->offsety = 0;
 	if (map->vw > map->vh)
 		map->scale = (float)map->w_width / (map->lenx) / 4.;
 	else

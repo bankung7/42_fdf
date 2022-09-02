@@ -49,6 +49,7 @@ $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	@printf "\033[A \033[K"
 
 $(LIBFT):
+	@make -C mlx/
 	@make -C $(LIBFT_DIR)
 
 clean:
@@ -57,6 +58,7 @@ clean:
 	@echo "$(R)fdf is clean$(N)"
 
 fclean: clean
+	@make clean -C mlx
 	@make fclean -C $(LIBFT_DIR)
 	@$(RM) $(NAME)
 	@echo "$(R)fdf is fclean$(N)"

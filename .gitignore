@@ -50,3 +50,11 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+mlx_linux/
+objs/
+fdf_linux
+*.pdf
+*.txt
+test_fdf
+fdf
+test_maps/

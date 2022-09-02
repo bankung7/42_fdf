@@ -1,50 +1,40 @@
 #include "fdf.h"
 
-void	ft_rotx(t_map *map, t_line *line)
+static void	ft_rotx(t_map *map, t_line *line)
 {
 	float	v;
-	float	x;
 	float	y;
 	float	z;
 
 	v = map->rx * 3.1416 / 180.;
-	x = line->x0;
 	y = line->y0;
 	z = line->z0;
-	line->x0 = x;
 	line->y0 = y * cos(v) - z * sin(v);
 	line->z0 = y * sin(v) + z * cos(v);
-	x = line->x1;
 	y = line->y1;
 	z = line->z1;
-	line->x1 = x;
 	line->y1 = y * cos(v) - z * sin(v);
 	line->z1 = y * sin(v) + z * cos(v);
 }
 
-void	ft_roty(t_map *map, t_line *line)
+static void	ft_roty(t_map *map, t_line *line)
 {
 	float	v;
 	float	x;
-	float	y;
 	float	z;
 
 	v = map->ry * 3.1416 / 180.;
 	x = line->x0;
-	y = line->y0;
 	z = line->z0;
 	line->x0 = x * cos(v) + z * sin(v);
-	line->y0 = y;
 	line->z0 = x * -sin(v) + z * cos(v);
 	x = line->x1;
-	y = line->y1;
 	z = line->z1;
 	line->x1 = x * cos(v) + z * sin(v);
-	line->y1 = y;
 	line->z1 = x * -sin(v) + z * cos(v);
 }
 
-void	ft_rotz(t_map *map, t_line *line)
+static void	ft_rotz(t_map *map, t_line *line)
 {
 	float	v;
 	float	x;
@@ -61,7 +51,7 @@ void	ft_rotz(t_map *map, t_line *line)
 	line->y1 = x * sin(v) + y * cos(v);
 }
 
-void	ft_isometric(t_line *line)
+static void	ft_isometric(t_line *line)
 {
 	float	x;
 	float	y;
@@ -86,7 +76,8 @@ void	ft_2d(t_map *map, t_line *line)
 	ft_rotx(map, line);
 	ft_roty(map, line);
 	ft_rotz(map, line);
-	//ft_isometric(line);
+	if (map->is_iso == 1)
+		ft_isometric(line);
 	line->x0 += map->offsetx;
 	line->y0 += map->offsety;
 	line->x1 += map->offsetx;

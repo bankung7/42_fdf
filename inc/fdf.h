@@ -5,6 +5,7 @@
 # include <stdlib.h>
 # include <math.h>
 # include <fcntl.h>
+# include <stdio.h>
 # include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
@@ -68,17 +69,18 @@ typedef struct s_map
 	int		vh;
 	int		w_width;
 	int		w_height;
-	float	rx;
-	float	ry;
-	float	rz;
+	int		rx;
+	int		ry;
+	int		rz;
 	t_px	**px;
-	float	pa;
+	int		pa;
 	float	scale;
 	int		offsetx;
 	int		offsety;
 	float	lenx;
 	float	leny;
 	int		inverse;
+	int		is_iso;
 }	t_map;
 
 // fdf.c
@@ -93,9 +95,8 @@ int		ft_getdim(t_map *map, char *file);
 int		ft_getpx(t_map *map, char *file);
 
 // exit.c
-int		ft_exit(char *str, t_map *map, int n);
 int		ft_free(void **arr);
-int		ft_read(t_map *map);
+int		ft_exit(char *str, t_map *map, int n);
 
 // hook.c
 int		ft_close(t_map *map);
@@ -106,12 +107,13 @@ void	ft_2d(t_map *map, t_line *line);
 
 // setup.c
 int		ft_setup(t_map *map);
-int		ft_mixcolor(t_line *line, float pos);
 void	ft_drawbg(t_map *map, int color);
 void	ft_menu(t_map *map);
 
 // utils.c
 int		ft_checkedge(t_map *map, t_line *line, float x, float y);
+int		ft_mixcolor(t_line *line, float pos);
 int		ft_inversecolor(int color);
+int		ft_read(t_map *map);
 
 #endif

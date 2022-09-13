@@ -34,6 +34,8 @@ int	ft_exit(char *str, t_map *map, int n)
 			free(map->px[i++]);
 		free(map->px);
 	}
+	mlx_destroy_image(map->mlx, map->img.ptr);
+	mlx_destroy_window(map->mlx, map->win);
 	ft_putstr_fd(str, n);
 	exit(n);
 }

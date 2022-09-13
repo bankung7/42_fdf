@@ -50,6 +50,8 @@ static int	ft_getz(t_map *map, char *line, int i)
 		ft_exit("Cannot allocate memory\n", map, 2);
 	j = 0;
 	arr = ft_split(line, ' ');
+	if (arr == 0)
+		ft_exit("Cannot read anything\n", map, 2);
 	while (j < map->vw)
 	{
 		if (!arr[j])
@@ -59,6 +61,7 @@ static int	ft_getz(t_map *map, char *line, int i)
 		ft_color(map, i, j, arr[j]);
 		j++;
 	}
+	ft_free((void **)arr);
 	return (0);
 }
 
@@ -75,6 +78,8 @@ int	ft_getpx(t_map *map, char *file)
 	if (!map->px)
 		ft_exit("Cannot allocate memory\n", 0, 2);
 	line = get_next_line(fd);
+	if (line == 0)
+		ft_exit("Cannot read anything\n", map, 2);
 	i = 0;
 	while (line)
 	{
@@ -99,6 +104,8 @@ int	ft_getdim(t_map *map, char *file)
 	map->vh = 0;
 	line = get_next_line(fd);
 	arr = ft_split(line, ' ');
+	if (line == 0 || arr == 0)
+		ft_exit("Nothing in this file\n", 0, 2);
 	while (arr[map->vw])
 		map->vw++;
 	ft_free((void **)arr);

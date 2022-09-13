@@ -36,6 +36,8 @@ OBJS = $(addprefix $(OBJS_DIR),$(SRCS:.c=.o))
 
 all: $(NAME)
 
+bonus: $(NAME)
+
 $(NAME): $(OBJS) $(LIBFT)
 	@$(CC) $(CFLAGS) $^ $(MLX) $(MLX_FLAGS) -o $@
 #	@$(CC) $(CFLAGS) $^ $(MLX_LINUX) $(MLX_FLAGS_LINUX) -o $@

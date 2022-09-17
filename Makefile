@@ -57,6 +57,7 @@ $(LIBFT):
 clean:
 	@make clean -C $(LIBFT_DIR)
 	@$(RM) $(OBJS_DIR)
+	@$(RM) *.dSYM
 	@echo "$(R)fdf is clean$(N)"
 
 fclean: clean

@@ -73,10 +73,10 @@ int	ft_getpx(t_map *map, char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		ft_exit("Cannot open the file\n", 0, 2);
+		ft_exit("Cannot open the file\n", map, 2);
 	map->px = malloc(sizeof(t_px *) * (map->vh));
 	if (!map->px)
-		ft_exit("Cannot allocate memory\n", 0, 2);
+		ft_exit("Cannot allocate memory\n", map, 2);
 	line = get_next_line(fd);
 	if (line == 0)
 		ft_exit("Cannot read anything\n", map, 2);
@@ -99,13 +99,13 @@ int	ft_getdim(t_map *map, char *file)
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
-		ft_exit("Cannot open the file\n", 0, 2);
+		ft_exit("Cannot open the file\n", map, 2);
 	map->vw = 0;
 	map->vh = 0;
 	line = get_next_line(fd);
 	arr = ft_split(line, ' ');
 	if (line == 0 || arr == 0)
-		ft_exit("Nothing in this file\n", 0, 2);
+		ft_exit("Nothing in this file\n", map, 2);
 	while (arr[map->vw])
 		map->vw++;
 	ft_free((void **)arr);

@@ -12,9 +12,9 @@
 
 #include "fdf.h"
 
-int	ft_free(void **arr)
+int ft_free(void **arr)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	while (arr[i])
@@ -23,19 +23,20 @@ int	ft_free(void **arr)
 	return (0);
 }
 
-int	ft_exit(char *str, t_map *map, int n)
+int ft_exit(char *str, t_map *map, int n)
 {
-	int	i;
+	int i;
 
 	i = 0;
+	mlx_destroy_window(map->mlx, map->win);
 	if (map && map->px)
 	{
 		while (i < map->vh)
 			free(map->px[i++]);
 		free(map->px);
 	}
-	mlx_destroy_image(map->mlx, map->img.ptr);
-	mlx_destroy_window(map->mlx, map->win);
+	if (map != 0)
+		free(map);
 	ft_putstr_fd(str, n);
 	exit(n);
 }

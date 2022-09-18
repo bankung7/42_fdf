@@ -38,7 +38,7 @@ all: $(NAME)
 
 bonus: $(NAME)
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(LIBFT) $(OBJS) 
 	@$(CC) $(CFLAGS) $^ $(MLX) $(MLX_FLAGS) -o $@
 #	@$(CC) $(CFLAGS) $^ $(MLX_LINUX) $(MLX_FLAGS_LINUX) -o $@
 	@echo "$(G)fdf is ready$(N)"

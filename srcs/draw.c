@@ -109,7 +109,7 @@ void	ft_drawline(t_map *map, t_ace *ace, float x1, float y1)
 	line.z1 = map->px[(int)y1][(int)x1].z * map->pa;
 	line.color1 = map->px[(int)y1][(int)x1].color;
 	ft_2d(map, &line);
-	if (fabsf(line.y1 - line.y0) < fabsf(line.x1 - line.x0))
+	if (fabs(line.y1 - line.y0) < fabs(line.x1 - line.x0))
 	{
 		if (line.x0 > line.x1)
 			ft_swap(&line, ft_linelow, map);

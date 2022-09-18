@@ -14,7 +14,7 @@
 
 int	ft_close(t_map *map)
 {
-	ft_exit("Closing window\n", map, 0);
+	ft_exit("Cross was clicked, Window has closed\n", map, 0);
 	return (0);
 }
 
@@ -76,7 +76,7 @@ static int	ft_zoom(int keycode, t_map *map)
 int	ft_keyhook(int keycode, t_map *map)
 {
 	if (keycode == 53)
-		ft_exit("Closing window\n", map, 1);
+		ft_exit("ESC is pressed, window has closed!\n", map, 1);
 	else if (keycode == 0 || keycode == 2 || keycode == 6 || keycode == 8
 		|| keycode == 12 || keycode == 14 || keycode == 34 || keycode == 35)
 		ft_rotate(keycode, map);

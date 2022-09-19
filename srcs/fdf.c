@@ -53,15 +53,16 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		ft_exit("Incorrect format : ./fdf [file.fdf]\n", 0, 2);
-    map = malloc(sizeof(t_map));
-    if (!map)
-        ft_exit("Something went wrong, try again later\n", 0, 2);
+	map = malloc(sizeof(t_map));
+	if (!map)
+		ft_exit("Something went wrong, try again later\n", 0, 2);
 	ft_checkfile(argv[1], map);
 	ft_getdim(map, argv[1]);
 	ft_getpx(map, argv[1]);
 	ft_setup(map);
 	map->mlx = mlx_init();
 	map->win = mlx_new_window(map->mlx, map->w_width, map->w_height, "My fdf");
+
 	map->img.ptr = mlx_new_image(map->mlx, map->w_width, map->w_height);
 	map->img.addr = mlx_get_data_addr(map->img.ptr,
 			&map->img.bpp, &map->img.line_size, &map->img.endian);

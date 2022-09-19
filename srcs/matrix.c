@@ -18,7 +18,7 @@ static void	ft_rotx(t_map *map, t_line *line)
 	float	y;
 	float	z;
 
-	v = map->rx * 3.1416 / 180.;
+	v = map->rx * M_PI / 180.;
 	y = line->y0;
 	z = line->z0;
 	line->y0 = y * cos(v) - z * sin(v);
@@ -35,7 +35,7 @@ static void	ft_roty(t_map *map, t_line *line)
 	float	x;
 	float	z;
 
-	v = map->ry * 3.1416 / 180.;
+	v = map->ry * M_PI / 180.;
 	x = line->x0;
 	z = line->z0;
 	line->x0 = x * cos(v) + z * sin(v);
@@ -52,7 +52,7 @@ static void	ft_rotz(t_map *map, t_line *line)
 	float	x;
 	float	y;
 
-	v = map->rz * 3.1416 / 180.;
+	v = map->rz * M_PI / 180.;
 	x = line->x0;
 	y = line->y0;
 	line->x0 = x * cos(v) - y * sin(v);

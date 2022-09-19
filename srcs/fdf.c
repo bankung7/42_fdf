@@ -62,7 +62,6 @@ int	main(int argc, char **argv)
 	ft_setup(map);
 	map->mlx = mlx_init();
 	map->win = mlx_new_window(map->mlx, map->w_width, map->w_height, "My fdf");
-
 	map->img.ptr = mlx_new_image(map->mlx, map->w_width, map->w_height);
 	map->img.addr = mlx_get_data_addr(map->img.ptr,
 			&map->img.bpp, &map->img.line_size, &map->img.endian);

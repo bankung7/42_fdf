@@ -78,6 +78,7 @@ int	ft_getpx(t_map *map, char *file)
 	map->px = malloc(sizeof(t_px *) * (map->vh));
 	if (!map->px)
 		ft_exit("Cannot allocate memory\n", map, 2);
+	ft_memset(map->px, 0, sizeof(t_px *) * map->vh);
 	line = get_next_line(fd);
 	if (line == 0)
 		ft_exit("Cannot read anything\n", map, 2);

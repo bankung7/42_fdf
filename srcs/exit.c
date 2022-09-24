@@ -6,7 +6,7 @@
 /*   By: vnilprap <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 12:08:33 by vnilprap          #+#    #+#             */
-/*   Updated: 2022/09/24 14:26:32 by vnilprap         ###   ########.fr       */
+/*   Updated: 2022/09/24 22:18:11 by vnilprap         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,19 +28,6 @@ int	ft_exit(char *str, t_map *map, int n)
 	int	i;
 
 	i = 0;
-<<<<<<< HEAD
-	if (map->img.ptr)
-		mlx_destroy_image(map->mlx, map->img.ptr);
-	if (map->win)
-		mlx_destroy_window(map->mlx, map->win);
-	if (map && map->px)
-	{
-		while (i < map->vh)
-			free(map->px[i++]);
-		free(map->px);
-	}
-=======
->>>>>>> 562029e854be0e5cb5a46d7e3b5c339265d1bd20
 	if (map)
 	{
 		if (map->img.ptr)

@@ -36,17 +36,6 @@ int	ft_draw(t_map *map)
 	return (0);
 }
 
-int	ft_checkfile(char *file, t_map *map)
-{
-	int	len;
-
-	len = ft_strlen(file);
-	if (file[len - 4] != '.' && file[len - 3] != 'f'
-		&& file[len - 2] != 'd' && file[len - 1] != 'f')
-		ft_exit("not .fdf file", map, 2);
-	return (0);
-}
-
 int	main(int argc, char **argv)
 {
 	t_map	*map;
@@ -56,7 +45,7 @@ int	main(int argc, char **argv)
 	map = malloc(sizeof(t_map));
 	if (!map)
 		ft_exit("Something went wrong, try again later\n", 0, 2);
-	ft_checkfile(argv[1], map);
+	ft_memset(map, 0, sizeof(t_map));
 	ft_getdim(map, argv[1]);
 	ft_getpx(map, argv[1]);
 	ft_setup(map);
@@ -66,8 +55,8 @@ int	main(int argc, char **argv)
 	map->img.addr = mlx_get_data_addr(map->img.ptr,
 			&map->img.bpp, &map->img.line_size, &map->img.endian);
 	mlx_loop_hook(map->mlx, ft_draw, map);
-	mlx_hook(map->win, 2, 1L << 2, ft_keyhook, map);
-	mlx_hook(map->win, 17, 1L << 17, ft_close, map);
+	mlx_hook(map->win, 2, 1L << 0, ft_keyhook, map);
+	mlx_hook(map->win, 17, 0, ft_close, map);
 	mlx_loop(map->mlx);
 	return (0);
 }

@@ -28,17 +28,20 @@ int	ft_exit(char *str, t_map *map, int n)
 	int	i;
 
 	i = 0;
-	mlx_destroy_image(map->mlx, map->img.ptr);
-	if (map->win)
-		mlx_destroy_window(map->mlx, map->win);
-	if (map && map->px)
-	{
-		while (i < map->vh)
-			free(map->px[i++]);
-		free(map->px);
-	}
 	if (map)
+	{
+		if (map->img.ptr)
+			mlx_destroy_image(map->mlx, map->img.ptr);
+		if (map->win)
+			mlx_destroy_window(map->mlx, map->win);
+		if (map->px)
+		{
+			while (i < map->vh)
+				free(map->px[i++]);
+			free(map->px);
+		}
 		free(map);
+	}
 	ft_putstr_fd(str, n);
 	exit(n);
 }

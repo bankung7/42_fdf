@@ -71,6 +71,7 @@ int	ft_getpx(t_map *map, char *file)
 	int		fd;
 	char	*line;
 
+	i = 0;
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		ft_exit("Cannot open the file\n", map, 2);
@@ -80,7 +81,6 @@ int	ft_getpx(t_map *map, char *file)
 	line = get_next_line(fd);
 	if (line == 0)
 		ft_exit("Cannot read anything\n", map, 2);
-	i = 0;
 	while (line)
 	{
 		ft_getz(map, line, i++);
